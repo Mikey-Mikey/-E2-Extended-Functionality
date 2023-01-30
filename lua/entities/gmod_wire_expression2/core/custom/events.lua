@@ -74,7 +74,6 @@ end)
 
 hook.Add("GravGunPunt", function(ply, ent)
     timer.Simple(0, function() E2Lib.triggerEvent("gravGunPunt", {ply, ent}) end)
-    return true
 end)
 
 hook.Add("OnPlayerPhysicsPickup", function(ply, ent)
