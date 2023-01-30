@@ -16,56 +16,59 @@ if SERVER then
     util.AddNetworkString("set_visual_size")
 end
 
+local function collisionCallback(ent, data)
+    local e2data = {
+        s = { 
+            OurEntity = ent,
+            HitPos = data.HitPos,
+            HitEntity = data.HitEntity,
+            OurOldVelocity = data.OurOldVelocity,
+            DeltaTime = data.DeltaTime,
+            TheirOldVelocity = data.TheirOldVelocity,
+            Speed = data.Speed,
+            HitNormal = data.HitNormal,
+            HitSpeed = data.HitSpeed,
+            OurNewVelocity = data.OurNewVelocity,
+            TheirNewVelocity = data.TheirNewVelocity,
+            OurOldAngularVelocity = data.OurOldAngularVelocity,
+            TheirOldAngularVelocity = data.TheirOldAngularVelocity
+        },
+        stypes = {
+            OurEntity = "e",
+            HitPos = "v",
+            HitEntity = "e",
+            OurOldVelocity = "v",
+            DeltaTime = "n",
+            TheirOldVelocity = "v",
+            Speed = "n",
+            HitNormal = "v",
+            HitSpeed = "v",
+            OurNewVelocity = "v",
+            TheirNewVelocity = "v",
+            OurOldAngularVelocity = "v",
+            TheirOldAngularVelocity = "v"
+        },
+        n = {}, ntypes = {},
+        size = 11
+    }
+    E2Lib.triggerEvent("entityCollide", {e2data})
+end
+
 __e2setcost(2)
 e2function void entity:addCollisionCallback()
-    if !IsValid(this) then return end
-    if #(this:GetCallbacks("PhysicsCollide")) > 0 then
-        return 0
-    end
-    return this:AddCallback("PhysicsCollide", function(ent,data)
-        local e2data = {
-            s = { 
-                OurEntity = ent,
-                HitPos = data.HitPos,
-                HitEntity = data.HitEntity,
-                OurOldVelocity = data.OurOldVelocity,
-                DeltaTime = data.DeltaTime,
-                TheirOldVelocity = data.TheirOldVelocity,
-                Speed = data.Speed,
-                HitNormal = data.HitNormal,
-                HitSpeed = data.HitSpeed,
-                OurNewVelocity = data.OurNewVelocity,
-                TheirNewVelocity = data.TheirNewVelocity,
-                OurOldAngularVelocity = data.OurOldAngularVelocity,
-                TheirOldAngularVelocity = data.TheirOldAngularVelocity
-            },
-            stypes = {
-                OurEntity = "e",
-                HitPos = "v",
-                HitEntity = "e",
-                OurOldVelocity = "v",
-                DeltaTime = "n",
-                TheirOldVelocity = "v",
-                Speed = "n",
-                HitNormal = "v",
-                HitSpeed = "v",
-                OurNewVelocity = "v",
-                TheirNewVelocity = "v",
-                OurOldAngularVelocity = "v",
-                TheirOldAngularVelocity = "v"
-            },
-            n = {}, ntypes = {},
-            size = 11
-        }
-        E2Lib.triggerEvent("entityCollide", {e2data})
-    end)
+
+    if !IsValid(this) then self:throw("Invalid entity!", "") return end
+    if this.e2CollisionCallback then self:throw("Entity already has a collision callback set!", "")  return end
+    this.e2CollisionCallback = this:AddCallback("PhysicsCollide", collisionCallback)
+
 end
 
 e2function void entity:removeCollisionCallback()
-    if !IsValid(this) then return end
-    for k, v in ipairs(this:GetCallbacks("PhysicsCollide")) do
-        this:RemoveCallback("PhysicsCollide", k)
-    end
+
+    if !IsValid(this) then self:throw("Invalid entity!", "") return end
+    if not this.e2CollisionCallback then self:throw("Entity already had its collision callback removed!", "") return end
+    this:RemoveCallback("PhysicsCollide", this.e2CollisionCallback)
+
 end
 
 hook.Add("GravGunOnPickedUp", function(ply,ent)
