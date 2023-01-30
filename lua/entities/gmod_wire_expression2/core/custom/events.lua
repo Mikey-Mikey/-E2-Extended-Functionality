@@ -2,8 +2,7 @@
 --self.player = chip owner
 
 E2Lib.RegisterExtension("extendedfunc", false, "Extended e2 functions and events")
-local extendedfunc = {}
-extendedfunc.alwaysallowpickups = {}
+
 E2Lib.registerEvent("entityCollide", {"t"})
 E2Lib.registerEvent("gravGunPunt", {"e","e"})
 E2Lib.registerEvent("gravGunPickup", {"e","e"})
@@ -12,8 +11,7 @@ E2Lib.registerEvent("physicsDropped", {"e","e"})
 E2Lib.registerEvent("physicsThrown", {"e","e"})
 
 if SERVER then
-    util.AddNetworkString("alreadycallback")
-    util.AddNetworkString("set_visual_size")
+    util.AddNetworkString("e2_propresize")
 end
 
 local function collisionCallback(ent, data)
@@ -116,7 +114,6 @@ local function ResizePhysics( ent, scale )
 	for convexkey, convex in pairs( physmesh ) do
 
 		for poskey, postab in pairs( convex ) do
-
 			convex[ poskey ] = postab.pos * scale
             pointcount = pointcount + 1
 		end
@@ -132,12 +129,20 @@ local function ResizePhysics( ent, scale )
 end
 
 e2function void entity:scaleEnt(vector scale)
+
     if !self.player:IsUserGroup("superadmin") then --change this to whatever group you want if you're on a server
-        self.player:PrintMessage("You're not a superadmin, you can't use this function!") -- same here
+        self:throw("Function is superadmin only!", "")
         return
     end
+
     if IsValid(this) then
         local phys = this:GetPhysicsObject()
+
+        if not IsValid(phys) then
+            self:throw("Can't resize a physicsless entity!", "") 
+            return
+        end
+
         local vel = this:GetVelocity()
         local angvel = phys:GetAngleVelocity()
         local pos = this:GetPos()
@@ -162,14 +167,19 @@ e2function void entity:scaleEnt(vector scale)
             phys:EnableMotion(frozen)
             phys:SetMaterial(phys_mat)
         end
+    else
+        self:throw("Invalid entity!", "") 
     end
+    
 end
 
 e2function void entity:resetScale()
+
     if !self.player:IsUserGroup("superadmin") then --change this to whatever group you want if you're on a server
-        self.player:PrintMessage("You're not a superadmin, you can't use this function!") -- same here
+        self:throw("Function is superadmin only!", "")
         return
     end
+
     if IsValid(this) then
         local phys = this:GetPhysicsObject()
         local vel = this:GetVelocity()
@@ -179,7 +189,7 @@ e2function void entity:resetScale()
         local frozen = phys:IsMotionEnabled()
         local phys_mat = phys:GetMaterial()
         ResizePhysics(this, scale)
-        net.Start("set_visual_size")
+        net.Start("e2_propresize")
             net.WriteEntity(this)
             net.WriteFloat(1)
             net.WriteFloat(1)
@@ -192,5 +202,7 @@ e2function void entity:resetScale()
         phys:SetAngleVelocity(angvel)
         phys:EnableMotion(frozen)
         phys:SetMaterial(phys_mat)
+    else
+        self:throw("Invalid entity!", "") 
     end
 end
