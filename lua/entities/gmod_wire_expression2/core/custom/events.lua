@@ -69,19 +69,19 @@ e2function void entity:removeCollisionCallback()
 
 end
 
-hook.Add("GravGunOnPickedUp", function(ply,ent)
+hook.Add("GravGunOnPickedUp", "extendedcore_gravpickup", function(ply,ent)
 	E2Lib.triggerEvent("gravGunPickup", {ply, ent})
 end)
 
-hook.Add("GravGunPunt", function(ply, ent)
+hook.Add("GravGunPunt", "extendedcore_gravpunt", function(ply, ent)
 	timer.Simple(0, function() E2Lib.triggerEvent("gravGunPunt", {ply, ent}) end)
 end)
 
-hook.Add("OnPlayerPhysicsPickup", function(ply, ent)
+hook.Add("OnPlayerPhysicsPickup", "extendedcore_physpickup", function(ply, ent)
 	E2Lib.triggerEvent("physicsPickup", {ply, ent})
 end)
 
-hook.Add("OnPlayerPhysicsDrop", function(ply, ent, thrown)
+hook.Add("OnPlayerPhysicsDrop", "extendedcore_physdrop", function(ply, ent, thrown)
 	if thrown then
 		timer.Simple(0, function() E2Lib.triggerEvent("physicsThrown", {ply, ent}) end)
 	else
