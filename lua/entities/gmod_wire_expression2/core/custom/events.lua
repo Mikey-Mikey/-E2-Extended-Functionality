@@ -70,16 +70,16 @@ end
 
 hook.Add("GravGunOnPickedUp", function(ply,ent)
     E2Lib.triggerEvent("gravGunPickup", {ply, ent})
-end
+end)
 
 hook.Add("GravGunPunt", function(ply, ent)
     timer.Simple(0, function() E2Lib.triggerEvent("gravGunPunt", {ply, ent}) end)
     return true
-end
+end)
 
 hook.Add("OnPlayerPhysicsPickup", function(ply, ent)
     E2Lib.triggerEvent("physicsPickup", {ply, ent})
-end
+end)
 
 hook.Add("OnPlayerPhysicsDrop", function(ply, ent, thrown)
     if thrown then
@@ -87,7 +87,7 @@ hook.Add("OnPlayerPhysicsDrop", function(ply, ent, thrown)
     else
         timer.Simple(0, function() E2Lib.triggerEvent("physicsDropped", {ply, ent}) end)
     end
-end
+end)
 
 e2function angle vector:vecToAng()
     return Angle(this[2],this[3],this[1])
