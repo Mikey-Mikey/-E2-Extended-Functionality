@@ -97,9 +97,6 @@ e2function vector angle:angToVec()
     return Vector(this[2],this[1],this[3])
 end
 
-
-
-
 local function ResizePhysics( ent, scale )
 
 	local physobj = ent:GetPhysicsObject()
@@ -116,15 +113,15 @@ local function ResizePhysics( ent, scale )
 		for poskey, postab in pairs( convex ) do
 			convex[ poskey ] = postab.pos * scale
             pointcount = pointcount + 1
+            if pointcount > 4800 then return false end
 		end
 
 	end
-    if pointcount > 4800 then return false end
     ent:PhysicsDestroy()
     ent:PhysicsInit( SOLID_VPHYSICS )
 	ent:PhysicsInitMultiConvex( physmesh )
 	ent:EnableCustomCollisions( true )
-	return ent:GetPhysicsObject():IsValid()
+	return
 
 end
 
@@ -174,7 +171,6 @@ e2function void entity:scaleEnt(vector scale)
 end
 
 e2function void entity:resetScale()
-
     if !self.player:IsUserGroup("superadmin") then --change this to whatever group you want if you're on a server
         self:throw("Function is superadmin only!", "")
         return
