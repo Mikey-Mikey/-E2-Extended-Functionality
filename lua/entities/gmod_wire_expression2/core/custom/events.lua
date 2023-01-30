@@ -89,11 +89,11 @@ hook.Add("OnPlayerPhysicsDrop", function(ply, ent, thrown)
 	end
 end)
 
-e2function angle vector:vecToAng()
+e2function angle vector:axisToAng()
 	return Angle(this[2],this[3],this[1])
 end
 
-e2function vector angle:angToVec()
+e2function vector angle:angToAxis()
 	return Vector(this[2],this[1],this[3])
 end
 

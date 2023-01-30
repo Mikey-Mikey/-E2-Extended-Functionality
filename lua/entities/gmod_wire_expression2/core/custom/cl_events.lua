@@ -15,14 +15,14 @@ Sets the visual and physical scale of an entity.
 E2Helper.Descriptions["resetScale"] = [[
 Resets the visual and physical scale of an entity.
 ]]
-E2Helper.Descriptions["vecToAng"] = [[
+E2Helper.Descriptions["axisToAng"] = [[
 Converts vec(R,P,Y) to ang(P,Y,R) 
 ]]
-E2Helper.Descriptions["angToVec"] = [[
+E2Helper.Descriptions["angToAxis"] = [[
 Converts ang(P,Y,R) to vec(R,P,Y)
 ]]
 
-net.Receive("set_visual_size", function()
+net.Receive("e2_propresize", function()
     local ent = net.ReadEntity()
     local scale = Vector(net.ReadFloat(),net.ReadFloat(),net.ReadFloat())
     local m = Matrix()
