@@ -68,73 +68,25 @@ e2function void entity:removeCollisionCallback()
     end
 end
 
-function GAMEMODE:GravGunOnPickedUp(ply, ent)
+hook.Add("GravGunOnPickedUp", function(ply,ent)
     E2Lib.triggerEvent("gravGunPickup", {ply, ent})
 end
 
-function GAMEMODE:GravGunPunt(ply, ent)
+hook.Add("GravGunPunt", function(ply, ent)
     timer.Simple(0, function() E2Lib.triggerEvent("gravGunPunt", {ply, ent}) end)
     return true
 end
 
-function GAMEMODE:OnPlayerPhysicsPickup(ply, ent)
+hook.Add("OnPlayerPhysicsPickup", function(ply, ent)
     E2Lib.triggerEvent("physicsPickup", {ply, ent})
 end
 
-function GAMEMODE:OnPlayerPhysicsDrop(ply, ent, thrown)
+hook.Add("OnPlayerPhysicsDrop", function(ply, ent, thrown)
     if thrown then
         timer.Simple(0, function() E2Lib.triggerEvent("physicsThrown", {ply, ent}) end)
     else
         timer.Simple(0, function() E2Lib.triggerEvent("physicsDropped", {ply, ent}) end)
     end
-end
-
-e2function entity table:getOurEntity()
-    return this.s.OurEntity
-end
-e2function vector table:getHitPos()
-    return this.s.HitPos
-end
-e2function entity table:getHitEntity()
-    return this.s.HitEntity
-end
-e2function vector table:getOurOldVel()
-    return this.s.OurOldVelocity
-end
-e2function number table:getDeltaTime()
-    return this.s.DeltaTime
-end
-e2function vector table:getTheirOldVel()
-    return this.s.TheirOldVelocity
-end
-e2function number table:getSpeed()
-    return this.s.Speed
-end
-e2function vector table:getHitNormal()
-    return this.s.HitNormal
-end
-e2function vector table:getHitSpeed()
-    return this.s.HitSpeed
-end
-e2function vector table:getOurNewVel()
-    return this.s.OurNewVelocity
-end
-e2function angle table:getTheirNewVel()
-    return this.s.TheirNewVelocity
-end
-e2function angle table:getOurOldAngvel()
-    local old = this.s.OurOldAngularVelocity
-    return Angle(old[2],old[3],old[1])
-end
-e2function vector table:getTheirOldAngvel()
-    local old = this.s.TheirOldAngularVelocity
-    return Angle(old[2],old[3],old[1])
-end
-e2function vector table:getOurOldAngvelVec()
-    return this.s.OurOldAngularVelocity
-end
-e2function vector table:getTheirOldAngvelVec()
-    return this.s.TheirOldAngularVelocity
 end
 
 e2function angle vector:vecToAng()

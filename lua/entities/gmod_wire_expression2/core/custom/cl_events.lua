@@ -15,52 +15,6 @@ Sets the visual and physical scale of an entity.
 E2Helper.Descriptions["resetScale"] = [[
 Resets the visual and physical scale of an entity.
 ]]
-
-E2Helper.Descriptions["getOurEntity"] = [[
-Gets our entity of the collision event
-]]
-E2Helper.Descriptions["getHitPos"] = [[
-Gets the pos of the collision event
-]]
-E2Helper.Descriptions["getHitEntity"] = [[
-Gets the hit entity of the collision event
-]]
-E2Helper.Descriptions["ourOldVel"] = [[
-Gets our old velocity of the collision event
-]]
-E2Helper.Descriptions["getDeltaTime"] = [[
-Gets the time since last collision of the collision event
-]]
-E2Helper.Descriptions["getTheirOldVel"] = [[
-Gets their old velocity of the collision event
-]]
-E2Helper.Descriptions["getSpeed"] = [[
-Gets the speed the collision event
-]]
-E2Helper.Descriptions["getHitNormal"] = [[
-Gets the hit normal of the collision event
-]]
-E2Helper.Descriptions["getHitSpeed"] = [[
-Gets the velocity at the point of collision of the collision event
-]]
-E2Helper.Descriptions["getOurNewVel"] = [[
-Gets our new velocity of the collision event
-]]
-E2Helper.Descriptions["getTheirNewVel"] = [[
-Gets their new velocity of the collision event
-]]
-E2Helper.Descriptions["getOurOldAngvel"] = [[
-Gets our old angle velocity of the collision event
-]]
-E2Helper.Descriptions["getTheirOldAngvel"] = [[
-Gets their old angle velocity of the collision event
-]]
-E2Helper.Descriptions["getOurOldAngvelVec"] = [[
-Gets our old angle velocity as a vector of the collision event
-]]
-E2Helper.Descriptions["getTheirOldAngvelVec"] = [[
-Gets their old angle velocity as a vector of the collision event
-]]
 E2Helper.Descriptions["vecToAng"] = [[
 Converts vec(R,P,Y) to ang(P,Y,R) 
 ]]
