@@ -154,6 +154,8 @@ local function ResizePhysics( ent, scale )
 
 end
 
+__e2setcost(50)
+
 e2function void entity:scaleEnt(vector scale)
 	if !self.player:IsUserGroup("superadmin") then --change this to whatever group you want if you're on a server
 		self:throw("Function is superadmin only!", "")
@@ -233,7 +235,8 @@ e2function void entity:resetScale()
 	end
 end
 
-__e2setcost(2)
+__e2setcost(5)
+
 e2function void entity:addCollisionCallback()
 	if !IsValid(this) then self:throw("Invalid entity!", "") return end
 	if this.e2CollisionCallback then self:throw("Entity already has a collision callback set!", "")  return end
@@ -245,6 +248,8 @@ e2function void entity:removeCollisionCallback()
 	if !this.e2CollisionCallback then self:throw("Entity already had its collision callback removed!", "") return end
 	this:RemoveCallback("PhysicsCollide", this.e2CollisionCallback)
 end
+
+__e2setcost(2)
 
 e2function angle vector:axisToAng()
 	return Angle(this[2],this[3],this[1])
