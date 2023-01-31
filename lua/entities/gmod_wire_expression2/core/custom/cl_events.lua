@@ -21,6 +21,12 @@ Converts vec(R,P,Y) to ang(P,Y,R)
 E2Helper.Descriptions["angToAxis"] = [[
 Converts ang(P,Y,R) to vec(R,P,Y)
 ]]
+E2Helper.Descriptions["isPlayerHoldingGrav"] = [[
+Is the entity being held with a gravity gun?
+]]
+E2Helper.Descriptions["isPlayerHoldingHands"] = [[
+Is the entity being held with a players hands?
+]]
 
 net.Receive("e2_propresize", function()
     local ent = net.ReadEntity()

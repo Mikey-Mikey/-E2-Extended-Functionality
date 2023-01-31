@@ -153,12 +153,10 @@ e2function vector angle:angToAxis()
 end
 
 e2function number entity:isPlayerHoldingGrav()
-	print(extendedfunc.gravholding[this])
 	return extendedfunc.gravholding[this] and 1 or 0
 end
 
-e2function number entity:isPlayerHoldingHand()
-	print(extendedfunc.gravholding[this])
+e2function number entity:isPlayerHoldingHands()
 	return extendedfunc.handholding[this] and 1 or 0
 end
 
