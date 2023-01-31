@@ -255,13 +255,16 @@ e2function vector angle:angToAxis()
 end
 
 e2function number entity:isPlayerHoldingGrav()
+	if !IsValid(this) then self:throw("Invalid entity!", "") return end
 	return extendedfunc.gravholding[this] and 1 or 0
 end
 
 e2function number entity:isPlayerHoldingHands()
+	if !IsValid(this) then self:throw("Invalid entity!", "") return end
 	return extendedfunc.handholding[this] and 1 or 0
 end
 
 e2function vector entity:getScale()
+	if !IsValid(this) then self:throw("Invalid entity!", "") return end
 	return this.e2_scale or Vector(1,1,1)
 end
