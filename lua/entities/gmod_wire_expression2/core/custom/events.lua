@@ -58,23 +58,6 @@ local function collisionCallback(ent, data)
 	E2Lib.triggerEvent("entityCollide", {coldata})
 end
 
-__e2setcost(2)
-e2function void entity:addCollisionCallback()
-
-	if !IsValid(this) then self:throw("Invalid entity!", "") return end
-	if this.e2CollisionCallback then self:throw("Entity already has a collision callback set!", "")  return end
-	this.e2CollisionCallback = this:AddCallback("PhysicsCollide", collisionCallback)
-
-end
-
-e2function void entity:removeCollisionCallback()
-
-	if !IsValid(this) then self:throw("Invalid entity!", "") return end
-	if !this.e2CollisionCallback then self:throw("Entity already had its collision callback removed!", "") return end
-	this:RemoveCallback("PhysicsCollide", this.e2CollisionCallback)
-
-end
-
 hook.Add("GravGunOnPickedUp", "extendedcore_gravpickup", function(ply,ent)
 	E2Lib.triggerEvent("gravGunPickup", {ply, ent})
 	extendedfunc.gravholding[ent] = true
@@ -144,22 +127,6 @@ hook.Add("EntityFireBullets", "extendedfunc_firebullets", function(ent, bulletin
 	timer.Simple(0, function() E2Lib.triggerEvent("bulletFired", {ent, bulletdata}) end)
 end)
 
-e2function angle vector:axisToAng()
-	return Angle(this[2],this[3],this[1])
-end
-
-e2function vector angle:angToAxis()
-	return Vector(this[2],this[1],this[3])
-end
-
-e2function number entity:isPlayerHoldingGrav()
-	return extendedfunc.gravholding[this] and 1 or 0
-end
-
-e2function number entity:isPlayerHoldingHands()
-	return extendedfunc.handholding[this] and 1 or 0
-end
-
 local function ResizePhysics( ent, scale )
 
 	local physobj = ent:GetPhysicsObject()
@@ -185,10 +152,6 @@ local function ResizePhysics( ent, scale )
 	ent:EnableCustomCollisions( true )
 	return true
 
-end
-
-e2function vector entity:getScale()
-	return this.e2_scale or Vector(1,1,1)
 end
 
 e2function void entity:scaleEnt(vector scale)
@@ -268,4 +231,37 @@ e2function void entity:resetScale()
 	else
 		self:throw("Invalid entity!", "") 
 	end
+end
+
+__e2setcost(2)
+e2function void entity:addCollisionCallback()
+	if !IsValid(this) then self:throw("Invalid entity!", "") return end
+	if this.e2CollisionCallback then self:throw("Entity already has a collision callback set!", "")  return end
+	this.e2CollisionCallback = this:AddCallback("PhysicsCollide", collisionCallback)
+end
+
+e2function void entity:removeCollisionCallback()
+	if !IsValid(this) then self:throw("Invalid entity!", "") return end
+	if !this.e2CollisionCallback then self:throw("Entity already had its collision callback removed!", "") return end
+	this:RemoveCallback("PhysicsCollide", this.e2CollisionCallback)
+end
+
+e2function angle vector:axisToAng()
+	return Angle(this[2],this[3],this[1])
+end
+
+e2function vector angle:angToAxis()
+	return Vector(this[2],this[1],this[3])
+end
+
+e2function number entity:isPlayerHoldingGrav()
+	return extendedfunc.gravholding[this] and 1 or 0
+end
+
+e2function number entity:isPlayerHoldingHands()
+	return extendedfunc.handholding[this] and 1 or 0
+end
+
+e2function vector entity:getScale()
+	return this.e2_scale or Vector(1,1,1)
 end
