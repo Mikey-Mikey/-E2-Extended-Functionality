@@ -10,9 +10,9 @@ extendedfunc.handholding = {}
 E2Lib.registerEvent("entityCollide", {"t"})
 E2Lib.registerEvent("gravGunPunt", {"e","e"})
 E2Lib.registerEvent("gravGunPickup", {"e","e"})
-E2Lib.registerEvent("physicsPickup", {"e","e"})
-E2Lib.registerEvent("physicsDropped", {"e","e"})
-E2Lib.registerEvent("physicsThrown", {"e","e"})
+E2Lib.registerEvent("handPickup", {"e","e"})
+E2Lib.registerEvent("handDropped", {"e","e"})
+E2Lib.registerEvent("handThrown", {"e","e"})
 E2Lib.registerEvent("entityDamaged", {"e","t"})
 E2Lib.registerEvent("bulletFired", {"e","t"})
 
@@ -86,13 +86,13 @@ hook.Add("GravGunPunt", "extendedcore_gravpunt", function(ply, ent)
 end)
 
 hook.Add("OnPlayerPhysicsPickup", "extendedcore_physpickup", function(ply, ent)
-	E2Lib.triggerEvent("physicsPickup", {ply, ent})
+	E2Lib.triggerEvent("handPickup", {ply, ent})
 	extendedfunc.handholding[ent] = true
 end)
 
 hook.Add("OnPlayerPhysicsDrop", "extendedcore_physdrop", function(ply, ent, thrown)
 	-- this hook is run before the player actually dropped the item, for entity manipulation
-	timer.Simple(0, function() E2Lib.triggerEvent("physics"..(thrown and "Thrown" or "Dropped"), {ply, ent}) end)
+	timer.Simple(0, function() E2Lib.triggerEvent("hand"..(thrown and "Thrown" or "Dropped"), {ply, ent}) end)
 	extendedfunc.handholding[ent] = false
 end)
 
