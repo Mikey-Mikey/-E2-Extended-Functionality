@@ -55,7 +55,9 @@ local function collisionCallback(ent, data)
 		n = {}, ntypes = {},
 		size = 11
 	}
-	E2Lib.triggerEvent("entityCollide", {coldata})
+	for e2, _ in pairs(ent.e2CollisionCallbacks) do
+		e2:ExecuteEvent("entityCollide", {coldata})
+	end
 end
 
 hook.Add("GravGunOnPickedUp", "extendedcore_gravpickup", function(ply,ent)
@@ -239,14 +241,16 @@ __e2setcost(5)
 
 e2function void entity:addCollisionCallback()
 	if !IsValid(this) then self:throw("Invalid entity!", "") return end
-	if this.e2CollisionCallback then self:throw("Entity already has a collision callback set!", "")  return end
-	this.e2CollisionCallback = this:AddCallback("PhysicsCollide", collisionCallback)
+	this.e2CollisionCallbacks = this.e2CollisionCallbacks or {}
+	if this.e2CollisionCallbacks[self] then self:throw("Entity already has a collision callback set!", "") return end
+	this.e2CollisionCallbacks[self] = this:AddCallback("PhysicsCollide", collisionCallback)
 end
 
 e2function void entity:removeCollisionCallback()
 	if !IsValid(this) then self:throw("Invalid entity!", "") return end
-	if !this.e2CollisionCallback then self:throw("Entity already had its collision callback removed!", "") return end
-	this:RemoveCallback("PhysicsCollide", this.e2CollisionCallback)
+	if not (this.e2CollisionCallbacks or this.e2CollisionCallbacks[self]) then self:throw("Entity already had its collision callback removed!", "") return end
+	this:RemoveCallback("PhysicsCollide", this.e2CollisionCallbacks[self])
+	this.e2CollisionCallbacks[self] = nil
 end
 
 __e2setcost(2)
