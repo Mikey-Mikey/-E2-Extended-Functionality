@@ -8,12 +8,13 @@ extendedfunc.gravholding = {}
 extendedfunc.handholding = {}
 
 E2Lib.registerEvent("entityCollide", {"t"})
+E2Lib.registerEvent("entityDamaged", {"e","t"})
+E2Lib.registerEvent("entityCreated", {"e"})
 E2Lib.registerEvent("gravGunPunt", {"e","e"})
 E2Lib.registerEvent("gravGunPickup", {"e","e"})
 E2Lib.registerEvent("handPickup", {"e","e"})
 E2Lib.registerEvent("handDropped", {"e","e"})
 E2Lib.registerEvent("handThrown", {"e","e"})
-E2Lib.registerEvent("entityDamaged", {"e","t"})
 E2Lib.registerEvent("bulletFired", {"e","t"})
 
 if SERVER then
@@ -127,6 +128,10 @@ hook.Add("EntityFireBullets", "extendedfunc_firebullets", function(ent, bulletin
 	}
 	-- timer is here to fix infinite loop crash if you fire a bullet inside of the event.
 	timer.Simple(0, function() E2Lib.triggerEvent("bulletFired", {ent, bulletdata}) end)
+end)
+
+hook.Add("OnEntityCreated", "extendedfunc_entitycreated", function(ent)
+	timer.Simple(0, function() E2Lib.triggerEvent("entityCreated", {ent}) end)
 end)
 
 local function ResizePhysics( ent, scale )
