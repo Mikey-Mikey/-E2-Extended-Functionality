@@ -24,6 +24,9 @@ Converts ang(P,Y,R) to vec(R,P,Y)
 E2Helper.Descriptions["isPlayerHoldingGrav"] = [[
 Is the entity being held with a gravity gun?
 ]]
+E2Helper.Descriptions["isPlayerHoldingPhys"] = [[
+Is the entity being held with a physics gun?
+]]
 E2Helper.Descriptions["isPlayerHoldingHands"] = [[
 Is the entity being held with a players hands?
 ]]

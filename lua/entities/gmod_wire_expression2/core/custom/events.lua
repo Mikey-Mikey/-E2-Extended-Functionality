@@ -5,13 +5,19 @@ E2Lib.RegisterExtension("extendedfunc", false, "Extended e2 functions and events
 
 local extendedfunc = {}
 extendedfunc.gravholding = {}
+extendedfunc.physholding = {}
 extendedfunc.handholding = {}
 
 E2Lib.registerEvent("entityCollide", {"t"})
-E2Lib.registerEvent("entityDamaged", {"e","t"})
 E2Lib.registerEvent("entityCreated", {"e"})
+E2Lib.registerEvent("entityDamaged", {"e","t"})
+E2Lib.registerEvent("entityBreak", {"e","e"})
 E2Lib.registerEvent("gravGunPunt", {"e","e"})
 E2Lib.registerEvent("gravGunPickup", {"e","e"})
+E2Lib.registerEvent("physGunPickup", {"e","e"})
+E2Lib.registerEvent("physGunDropped", {"e","e"})
+E2Lib.registerEvent("physGunFreeze", {"e","e"})
+E2Lib.registerEvent("physGunUnfreeze", {"e","e"})
 E2Lib.registerEvent("handPickup", {"e","e"})
 E2Lib.registerEvent("handDropped", {"e","e"})
 E2Lib.registerEvent("handThrown", {"e","e"})
@@ -71,6 +77,25 @@ hook.Add("GravGunPunt", "extendedcore_gravpunt", function(ply, ent)
 	extendedfunc.gravholding[ent] = false
 end)
 
+hook.Add("OnPhysgunPickup", "extendedcore_physpickup", function(ply,ent)
+	E2Lib.triggerEvent("physGunPickup", {ply, ent})
+	extendedfunc.physholding[ent] = true
+end)
+
+hook.Add("PhysgunDrop", "extendedcore_physdrop", function(ply, ent)
+	timer.Simple(0, function() E2Lib.triggerEvent("physGunDropped", {ply, ent}) end)
+	extendedfunc.physholding[ent] = false
+end)
+
+hook.Add("OnPhysgunFreeze", "extendedcore_physfreeze", function(weapon, phys, ent, ply)
+	timer.Simple(0, function() E2Lib.triggerEvent("physGunFreeze", {ply, ent}) end)
+	extendedfunc.physholding[ent] = false
+end)
+
+hook.Add("CanPlayerUnfreeze", "extendedcore_physunfreeze", function(ply, ent, phys)
+	timer.Simple(0, function() E2Lib.triggerEvent("physGunUnfreeze", {ply, ent}) end)
+end)
+
 hook.Add("OnPlayerPhysicsPickup", "extendedcore_physpickup", function(ply, ent)
 	E2Lib.triggerEvent("handPickup", {ply, ent})
 	extendedfunc.handholding[ent] = true
@@ -107,6 +132,13 @@ hook.Add("EntityTakeDamage", "extendedcore_entdamage", function(ent, dmginfo)
 	}
 	-- timer is here to fix infinite loop crash if the entity damages itself.
 	timer.Simple(0, function() E2Lib.triggerEvent("entityDamaged", {ent, dmgdata}) end)
+end)
+
+hook.Add("PropBreak", "extendedfunc_entbreak", function(ply, ent)
+	E2Lib.triggerEvent("entityBreak", {ply, ent})
+	extendedfunc.handholding[ent] = false
+	extendedfunc.physholding[ent] = false
+	extendedfunc.gravholding[ent] = false
 end)
 
 hook.Add("EntityFireBullets", "extendedfunc_firebullets", function(ent, bulletinfo)
@@ -271,6 +303,11 @@ end
 e2function number entity:isPlayerHoldingGrav()
 	if !IsValid(this) then self:throw("Invalid entity!", "") return end
 	return extendedfunc.gravholding[this] and 1 or 0
+end
+
+e2function number entity:isPlayerHoldingPhys()
+	if !IsValid(this) then self:throw("Invalid entity!", "") return end
+	return extendedfunc.physholding[this] and 1 or 0
 end
 
 e2function number entity:isPlayerHoldingHands()
