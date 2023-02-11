@@ -1,12 +1,27 @@
 --self.entity = chip
 --self.player = chip owner
 
+CreateConVar("sbox_E2_maxRagsPerSecond", 4, FCVAR_NONE, "", 1)
+
 E2Lib.RegisterExtension("extendedfunc", false, "Extended e2 functions and events")
 
 local extendedfunc = {}
 extendedfunc.gravholding = {}
 extendedfunc.physholding = {}
 extendedfunc.handholding = {}
+
+registerCallback("construct", function(self)
+	self.entity.ragSpawnUndo = 1
+	self.player.ragsBursted = 0
+	self.entity.ragsToUndo = {}
+	timer.Create("wire_expression2_ragburst_clear", 1.0, 0, function()
+		self.player.ragsBursted = 0
+	end)
+end)
+
+for i,ply in ipairs(player.GetAll()) do
+	ply.lastRagSpawntime = 0
+end
 
 E2Lib.registerEvent("entityCollide", {"t"})
 E2Lib.registerEvent("entityCreated", {"e"})
@@ -166,6 +181,10 @@ hook.Add("OnEntityCreated", "extendedfunc_entitycreated", function(ent)
 	timer.Simple(0, function() E2Lib.triggerEvent("entityCreated", {ent}) end)
 end)
 
+hook.Add("PlayerInitialSpawn", "extendedfunc_plyinitspawn", function(ply, trans)
+	ply.lastRagSpawntime = 0
+end)
+
 local function ResizePhysics( ent, scale )
 
 	local physobj = ent:GetPhysicsObject()
@@ -192,7 +211,6 @@ local function ResizePhysics( ent, scale )
 	return true
 
 end
-
 __e2setcost(50)
 
 e2function void entity:scaleEnt(vector scale)
@@ -274,6 +292,117 @@ e2function void entity:resetScale()
 	end
 end
 
+local function RagCanSpawn(ply)
+	return ply.ragsBursted < GetConVar("sbox_E2_maxRagsPerSecond"):GetFloat() and true or false
+end
+
+
+e2function number ragCanSpawn()
+	return RagCanSpawn(self.player) and 1 or 0
+end
+
+e2function void ragSpawnUndo(number state)
+	self.entity.ragSpawnUndo = state == 1
+end
+
+e2function entity ragSpawn(string model, vector pos, angle ang)
+	if RagCanSpawn(self.player) then
+		local ent = ents.Create("prop_ragdoll")
+		ent:SetModel(model)
+		ent:SetPos(pos)
+		ent:SetAngles(ang)
+		ent:Spawn()
+		ent:Activate()
+
+		if self.entity.ragSpawnUndo then
+			undo.Create("E2 Spawned Ragdoll")
+			undo.AddEntity(ent)
+			undo.SetPlayer(self.player)
+			undo.Finish("E2 Spawned Ragdoll")
+		else
+			self.entity.ragsToUndo[#self.entity.ragsToUndo + 1] = ent
+		end
+
+		self.player.ragsBursted = self.player.ragsBursted + 1
+
+		self.player.lastRagSpawntime = CurTime()
+		return ent
+	end
+end
+
+e2function entity ragSpawn(string model, vector pos)
+	if RagCanSpawn(self.player) then
+		local ent = ents.Create("prop_ragdoll")
+		ent:SetModel(model)
+		ent:SetPos(pos)
+		ent:Spawn()
+		ent:Activate()
+
+		if self.entity.ragSpawnUndo then
+			undo.Create("E2 Spawned Ragdoll")
+			undo.AddEntity(ent)
+			undo.SetPlayer(self.player)
+			undo.Finish("E2 Spawned Ragdoll")
+		else
+			self.entity.ragsToUndo[#self.entity.ragsToUndo + 1] = ent
+		end
+
+		self.player.ragsBursted = self.player.ragsBursted + 1
+
+		self.player.lastRagSpawntime = CurTime()
+		return ent
+	end
+end
+
+e2function entity ragSpawn(string model, angle ang)
+	if RagCanSpawn(self.player) then
+		local ent = ents.Create("prop_ragdoll")
+		ent:SetModel(model)
+		ent:SetPos(self.entity:GetPos() + self.entity:GetUp() * 50)
+		ent:SetAngles(ang)
+		ent:Spawn()
+		ent:Activate()
+
+		if self.entity.ragSpawnUndo then
+			undo.Create("E2 Spawned Ragdoll")
+			undo.AddEntity(ent)
+			undo.SetPlayer(self.player)
+			undo.Finish("E2 Spawned Ragdoll")
+		else
+			self.entity.ragsToUndo[#self.entity.ragsToUndo + 1] = ent
+		end
+
+		self.player.ragsBursted = self.player.ragsBursted + 1
+
+		self.player.lastRagSpawntime = CurTime()
+		return ent
+	end
+end
+
+e2function entity ragSpawn(string model)
+	if RagCanSpawn(self.player) then
+		local ent = ents.Create("prop_ragdoll")
+		ent:SetModel(model)
+		ent:SetPos(self.entity:GetPos() + self.entity:GetUp() * 50)
+		ent:Spawn()
+		ent:Activate()
+
+		if self.entity.ragSpawnUndo then
+			undo.Create("E2 Spawned Ragdoll")
+			undo.AddEntity(ent)
+			undo.SetPlayer(self.player)
+			undo.Finish("E2 Spawned Ragdoll")
+		else
+			self.entity.ragsToUndo[#self.entity.ragsToUndo + 1] = ent
+		end
+
+		self.player.ragsBursted = self.player.ragsBursted + 1
+
+		self.player.lastRagSpawntime = CurTime()
+		return ent
+	end
+end
+
 __e2setcost(5)
 
 e2function void entity:addCollisionCallback()
@@ -319,3 +448,9 @@ e2function vector entity:getScale()
 	if !IsValid(this) then self:throw("Invalid entity!", "") return end
 	return this.e2_scale or Vector(1,1,1)
 end
+
+registerCallback("destruct", function(self)
+	for k,v in ipairs(self.entity.ragsToUndo) do
+		SafeRemoveEntity(v)
+	end
+end)
