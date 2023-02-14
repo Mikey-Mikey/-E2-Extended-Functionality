@@ -304,89 +304,22 @@ end
 e2function void ragSpawnUndo(number state)
 	self.entity.ragSpawnUndo = state == 1
 end
-
+function RagSpawn(model, pos, ang, owner)
+	local ent = ents.Create("prop_ragdoll")
+	ent:SetModel(model)
+	ent:SetPos(pos)
+	ent:SetAngles(ang)
+	ent:Spawn()
+	ent:Activate()
+	if ( IsValid( owner ) ) then
+		gamemode.Call( "PlayerSpawnedRagdoll", owner, model, ent )
+	end
+	return ent
+end
 e2function entity ragSpawn(string model, vector pos, angle ang)
 	if RagCanSpawn(self.player) then
-		local ent = ents.Create("prop_ragdoll")
-		ent:SetModel(model)
-		ent:SetPos(pos)
-		ent:SetAngles(ang)
-		ent:Spawn()
-		ent:Activate()
-
-		if self.entity.ragSpawnUndo then
-			undo.Create("E2 Spawned Ragdoll")
-			undo.AddEntity(ent)
-			undo.SetPlayer(self.player)
-			undo.Finish("E2 Spawned Ragdoll")
-		else
-			self.entity.ragsToUndo[#self.entity.ragsToUndo + 1] = ent
-		end
-
-		self.player.ragsBursted = self.player.ragsBursted + 1
-
-		self.player.lastRagSpawntime = CurTime()
-		return ent
-	end
-end
-
-e2function entity ragSpawn(string model, vector pos)
-	if RagCanSpawn(self.player) then
-		local ent = ents.Create("prop_ragdoll")
-		ent:SetModel(model)
-		ent:SetPos(pos)
-		ent:Spawn()
-		ent:Activate()
-
-		if self.entity.ragSpawnUndo then
-			undo.Create("E2 Spawned Ragdoll")
-			undo.AddEntity(ent)
-			undo.SetPlayer(self.player)
-			undo.Finish("E2 Spawned Ragdoll")
-		else
-			self.entity.ragsToUndo[#self.entity.ragsToUndo + 1] = ent
-		end
-
-		self.player.ragsBursted = self.player.ragsBursted + 1
-
-		self.player.lastRagSpawntime = CurTime()
-		return ent
-	end
-end
-
-e2function entity ragSpawn(string model, angle ang)
-	if RagCanSpawn(self.player) then
-		local ent = ents.Create("prop_ragdoll")
-		ent:SetModel(model)
-		ent:SetPos(self.entity:GetPos() + self.entity:GetUp() * 50)
-		ent:SetAngles(ang)
-		ent:Spawn()
-		ent:Activate()
-
-		if self.entity.ragSpawnUndo then
-			undo.Create("E2 Spawned Ragdoll")
-			undo.AddEntity(ent)
-			undo.SetPlayer(self.player)
-			undo.Finish("E2 Spawned Ragdoll")
-		else
-			self.entity.ragsToUndo[#self.entity.ragsToUndo + 1] = ent
-		end
-
-		self.player.ragsBursted = self.player.ragsBursted + 1
-
-		self.player.lastRagSpawntime = CurTime()
-		return ent
-	end
-end
-
-e2function entity ragSpawn(string model)
-	if RagCanSpawn(self.player) then
-		local ent = ents.Create("prop_ragdoll")
-		ent:SetModel(model)
-		ent:SetPos(self.entity:GetPos() + self.entity:GetUp() * 50)
-		ent:Spawn()
-		ent:Activate()
-
+		
+		local ent = RagSpawn(model, pos, ang, self.player)
 		if self.entity.ragSpawnUndo then
 			undo.Create("E2 Spawned Ragdoll")
 			undo.AddEntity(ent)
