@@ -78,7 +78,9 @@ local function collisionCallback(ent, data)
 		size = 11
 	}
 	for e2, _ in pairs(ent.e2CollisionCallbacks) do
-		e2:ExecuteEvent("entityCollide", {coldata})
+		if IsValid(e2) then
+			e2:ExecuteEvent("entityCollide", {coldata})
+		end
 	end
 end
 
