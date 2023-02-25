@@ -15,7 +15,9 @@ registerCallback("construct", function(self)
 	self.player.ragsBursted = 0
 	self.entity.ragsToUndo = {}
 	timer.Create("wire_expression2_ragburst_clear", 1.0, 0, function()
-		self.player.ragsBursted = 0
+		if self.player then
+			self.player.ragsBursted = 0
+		end
 	end)
 end)
 
