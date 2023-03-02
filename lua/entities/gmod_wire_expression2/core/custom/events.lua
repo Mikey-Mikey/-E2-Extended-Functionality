@@ -25,20 +25,60 @@ for i,ply in ipairs(player.GetAll()) do
 	ply.lastRagSpawntime = 0
 end
 
-E2Lib.registerEvent("entityCollide", {"t"})
-E2Lib.registerEvent("entityCreated", {"e"})
-E2Lib.registerEvent("entityDamaged", {"e","t"})
-E2Lib.registerEvent("entityBreak", {"e","e"})
-E2Lib.registerEvent("gravGunPunt", {"e","e"})
-E2Lib.registerEvent("gravGunPickup", {"e","e"})
-E2Lib.registerEvent("physGunPickup", {"e","e"})
-E2Lib.registerEvent("physGunDropped", {"e","e"})
-E2Lib.registerEvent("physGunFreeze", {"e","e"})
-E2Lib.registerEvent("physGunUnfreeze", {"e","e"})
-E2Lib.registerEvent("handPickup", {"e","e"})
-E2Lib.registerEvent("handDropped", {"e","e"})
-E2Lib.registerEvent("handThrown", {"e","e"})
-E2Lib.registerEvent("bulletFired", {"e","t"})
+E2Lib.registerEvent("entityCollide", {
+	{"ColData","t"}
+})
+E2Lib.registerEvent("entityCreated", {
+	{"Ent","e"}
+})
+E2Lib.registerEvent("entityDamaged", {
+	{"Ent","e"},
+	{"DmgData","t"}
+})
+E2Lib.registerEvent("entityBreak", {
+	{"Ply","e"},
+	{"Ent","e"}
+})
+E2Lib.registerEvent("gravGunPunt", {
+	{"Ply","e"},
+	{"Ent","e"}
+})
+E2Lib.registerEvent("gravGunPickup", {
+	{"Ply","e"},
+	{"Ent","e"}
+})
+E2Lib.registerEvent("physGunPickup", {
+	{"Ply","e"},
+	{"Ent","e"}
+})
+E2Lib.registerEvent("physGunDropped", {
+	{"Ply","e"},
+	{"Ent","e"}
+})
+E2Lib.registerEvent("physGunFreeze", {
+	{"Ply","e"},
+	{"Ent","e"}
+})
+E2Lib.registerEvent("physGunUnfreeze", {
+	{"Ply","e"},
+	{"Ent","e"}
+})
+E2Lib.registerEvent("handPickup", {
+	{"Ply","e"},
+	{"Ent","e"}
+})
+E2Lib.registerEvent("handDropped", {
+	{"Ply","e"},
+	{"Ent","e"}
+})
+E2Lib.registerEvent("handThrown", {
+	{"Ply","e"},
+	{"Ent","e"}
+})
+E2Lib.registerEvent("bulletFired", {
+	{"Ent","e"},
+	{"BulletData","t"}
+})
 
 if SERVER then
 	util.AddNetworkString("e2_propresize")
