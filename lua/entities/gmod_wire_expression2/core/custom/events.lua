@@ -84,6 +84,13 @@ E2Lib.registerEvent("bulletFired", {
 	{"BulletData","t"}
 })
 
+E2Lib.registerEvent("mouseInput", {
+	{"Ply","e"},
+	{"DeltaX","n"},
+	{"DeltaY","n"},
+	{"Scroll", "n"}
+})
+
 if SERVER then
 	util.AddNetworkString("e2_propresize")
 end
@@ -236,6 +243,12 @@ end)
 
 hook.Add("PlayerInitialSpawn", "extendedfunc_plyinitspawn", function(ply, trans)
 	ply.lastRagSpawntime = 0
+end)
+hook.Add("SetupMove", "extendedfunc_mouseInput", function( ply, mv, cmd )
+	local deltaX = cmd:GetMouseX()
+	local deltaY = cmd:GetMouseY()
+	local scroll = cmd:GetMouseWheel()
+	E2Lib.triggerEvent("mouseInput", {ply, deltaX, deltaY, scroll})
 end)
 
 local function ResizePhysics( ent, scale )
