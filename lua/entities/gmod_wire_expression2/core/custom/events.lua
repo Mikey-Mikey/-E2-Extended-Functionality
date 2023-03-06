@@ -39,11 +39,15 @@ E2Lib.registerEvent("entityBreak", {
 	{"Ply","e"},
 	{"Ent","e"}
 })
-E2Lib.registerEvent("gravGunPunt", {
+E2Lib.registerEvent("gravGunPickup", {
 	{"Ply","e"},
 	{"Ent","e"}
 })
-E2Lib.registerEvent("gravGunPickup", {
+E2Lib.registerEvent("gravGunDropped", {
+	{"Ply","e"},
+	{"Ent","e"}
+})
+E2Lib.registerEvent("gravGunPunt", {
 	{"Ply","e"},
 	{"Ent","e"}
 })
@@ -129,6 +133,11 @@ end
 hook.Add("GravGunOnPickedUp", "extendedcore_gravpickup", function(ply,ent)
 	E2Lib.triggerEvent("gravGunPickup", {ply, ent})
 	extendedfunc.gravholding[ent] = true
+end)
+
+hook.Add("GravGunOnDropped", "extendedcore_gravdrop", function(ply,ent)
+	E2Lib.triggerEvent("gravGunDropped", {ply, ent})
+	extendedfunc.gravholding[ent] = false
 end)
 
 hook.Add("GravGunPunt", "extendedcore_gravpunt", function(ply, ent)
