@@ -281,9 +281,13 @@ __e2setcost(50)
 
 e2function void entity:scaleEnt(vector scale)
 	if !self.player:IsUserGroup("superadmin") then --change this to whatever group you want if you're on a server
-		self:throw("Function is superadmin only!", "")
-		return
+		return self:throw("Function is superadmin only!", nil)
 	end
+	
+	if this:IsPlayer() then
+		return self:throw("Function can't be ran on players!", nil)
+	end
+
 	if IsValid(this) then
 		local phys = this:GetPhysicsObject()
 
@@ -325,8 +329,11 @@ end
 
 e2function void entity:resetScale()
 	if !self.player:IsUserGroup("superadmin") then --change this to whatever group you want if you're on a server
-		self:throw("Function is superadmin only!", "")
-		return
+		return self:throw("Function is superadmin only!", nil)
+	end
+
+	if this:IsPlayer() then
+		return self:throw("Function can't be ran on players!", nil)
 	end
 
 	if IsValid(this) then
@@ -429,22 +436,22 @@ e2function vector angle:angToAxis()
 end
 
 e2function number entity:isPlayerHoldingGrav()
-	if !IsValid(this) then self:throw("Invalid entity!", "") return end
+	if !IsValid(this) then return self:throw("Invalid entity!", 0) end
 	return extendedfunc.gravholding[this] and 1 or 0
 end
 
 e2function number entity:isPlayerHoldingPhys()
-	if !IsValid(this) then self:throw("Invalid entity!", "") return end
+	if !IsValid(this) then return self:throw("Invalid entity!", 0) end
 	return extendedfunc.physholding[this] and 1 or 0
 end
 
 e2function number entity:isPlayerHoldingHands()
-	if !IsValid(this) then self:throw("Invalid entity!", "") return end
+	if !IsValid(this) then return self:throw("Invalid entity!", 0) end
 	return extendedfunc.handholding[this] and 1 or 0
 end
 
 e2function vector entity:getScale()
-	if !IsValid(this) then self:throw("Invalid entity!", "") return end
+	if !IsValid(this) then return self:throw("Invalid entity!", 0) end
 	return this.e2_scale or Vector(1,1,1)
 end
 
