@@ -223,17 +223,19 @@ hook.Add("EntityFireBullets", "extendedfunc_firebullets", function(ent, bulletin
 			Origin = bulletinfo.Src,
 			BulletCount = bulletinfo.Num,
 			AmmoType = bulletinfo.AmmoType,
-			Damage = bulletinfo.Damage
+			PlyDamage = game.GetAmmoData(game.GetAmmoID(bulletinfo.AmmoType)).plydmg,
+			NpcDamage = game.GetAmmoData(game.GetAmmoID(bulletinfo.AmmoType)).npcdmg
 		},
 		stypes = {
 			Direction = "v",
 			Origin = "v",
 			BulletCount = "n",
 			AmmoType = "s",
-			Damage = "n"
+			PlyDamage = "n",
+			NpcDamage = "n"
 		},
 		n = {}, ntypes = {},
-		size = 5
+		size = 6
 	}
 	-- timer is here to fix infinite loop crash if you fire a bullet inside of the event.
 	timer.Simple(0, function() E2Lib.triggerEvent("bulletFired", {ent, bulletdata}) end)
