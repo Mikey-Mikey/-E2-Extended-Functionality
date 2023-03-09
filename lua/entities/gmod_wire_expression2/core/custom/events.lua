@@ -217,14 +217,20 @@ hook.Add("PropBreak", "extendedfunc_entbreak", function(ply, ent)
 end)
 
 hook.Add("EntityFireBullets", "extendedfunc_firebullets", function(ent, bulletinfo)
+	local ply_dmg = game.GetAmmoPlayerDamage(game.GetAmmoID(bulletinfo.AmmoType))
+	local npc_dmg = game.GetAmmoNPCDamage(game.GetAmmoID(bulletinfo.AmmoType))
+	if ply_dmg == 0 and npc_dmg == 0 then
+		ply_dmg = bulletinfo.Damage
+		npc_dmg = bulletinfo.Damage
+	end
 	local bulletdata = {
 		s = {
 			Direction = bulletinfo.Dir,
 			Origin = bulletinfo.Src,
 			BulletCount = bulletinfo.Num,
 			AmmoType = bulletinfo.AmmoType,
-			PlyDamage = game.GetAmmoPlayerDamage(game.GetAmmoID(bulletinfo.AmmoType)),
-			NpcDamage = game.GetAmmoNPCDamage(game.GetAmmoID(bulletinfo.AmmoType))
+			PlyDamage = ply_dmg,
+			NpcDamage = npc_dmg
 		},
 		stypes = {
 			Direction = "v",
