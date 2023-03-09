@@ -223,8 +223,8 @@ hook.Add("EntityFireBullets", "extendedfunc_firebullets", function(ent, bulletin
 			Origin = bulletinfo.Src,
 			BulletCount = bulletinfo.Num,
 			AmmoType = bulletinfo.AmmoType,
-			PlyDamage = game.GetAmmoData(game.GetAmmoID(bulletinfo.AmmoType)).plydmg,
-			NpcDamage = game.GetAmmoData(game.GetAmmoID(bulletinfo.AmmoType)).npcdmg
+			PlyDamage = game.GetAmmoPlayerDamage(game.GetAmmoID(bulletinfo.AmmoType)),
+			NpcDamage = game.GetAmmoNPCDamage(game.GetAmmoID(bulletinfo.AmmoType))
 		},
 		stypes = {
 			Direction = "v",
