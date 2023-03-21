@@ -67,15 +67,15 @@ E2Lib.registerEvent("physGunUnfreeze", {
 	{"Ply","e"},
 	{"Ent","e"}
 })
-E2Lib.registerEvent("handPickup", {
+E2Lib.registerEvent("propPickup", {
 	{"Ply","e"},
 	{"Ent","e"}
 })
-E2Lib.registerEvent("handDropped", {
+E2Lib.registerEvent("propDropped", {
 	{"Ply","e"},
 	{"Ent","e"}
 })
-E2Lib.registerEvent("handThrown", {
+E2Lib.registerEvent("propThrown", {
 	{"Ply","e"},
 	{"Ent","e"}
 })
@@ -172,13 +172,13 @@ hook.Add("CanPlayerUnfreeze", "extendedcore_physunfreeze", function(ply, ent, ph
 end)
 
 hook.Add("OnPlayerPhysicsPickup", "extendedcore_physpickup", function(ply, ent)
-	E2Lib.triggerEvent("handPickup", {ply, ent})
+	E2Lib.triggerEvent("propPickup", {ply, ent})
 	extendedfunc.handholding[ent] = true
 end)
 
 hook.Add("OnPlayerPhysicsDrop", "extendedcore_physdrop", function(ply, ent, thrown)
 	-- this hook is run before the player actually dropped the item, for entity manipulation
-	timer.Simple(0, function() E2Lib.triggerEvent("hand"..(thrown and "Thrown" or "Dropped"), {ply, ent}) end)
+	timer.Simple(0, function() E2Lib.triggerEvent("prop"..(thrown and "Thrown" or "Dropped"), {ply, ent}) end)
 	extendedfunc.handholding[ent] = false
 end)
 
