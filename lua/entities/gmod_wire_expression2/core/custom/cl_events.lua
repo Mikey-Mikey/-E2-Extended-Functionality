@@ -30,15 +30,6 @@ Is the entity being held with a physics gun?
 E2Helper.Descriptions["isPlayerHoldingHands"] = [[
 Is the entity being held with a players hands?
 ]]
-E2Helper.Descriptions["ragSpawn"] = [[
-Spawns a ragdoll with the specified model.
-]]
-E2Helper.Descriptions["ragCanSpawn"] = [[
-Is an E2 created ragdoll able to be spawned by this player?
-]]
-E2Helper.Descriptions["ragSpawnUndo"] = [[
-Is an E2 created ragdoll able to be spawned by this player?
-]]
 
 net.Receive("e2_propresize", function()
     local ent = net.ReadEntity()
